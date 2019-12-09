@@ -6,7 +6,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ArgumentsSource;
 import org.junit.platform.runner.JUnitPlatform;
 import org.junit.runner.RunWith;
-import tests.input.SortData;
+import tests.input.TestData;
 import tests.input.SortInputDuplicatesProvider;
 import tests.input.SortInputOddProvider;
 import tests.input.SortInputEvenProvider;
@@ -17,7 +17,7 @@ public class QuickSortTest {
     @DisplayName("QuickSort Test - Odd Number of Elements")
     @ParameterizedTest(name = "Running permutation {index} of 5!")
     @ArgumentsSource(SortInputOddProvider.class)
-    void sortDistinctArrayWithOddElements(SortData arguments) {
+    void sortDistinctArrayWithOddElements(TestData arguments) {
         Integer[] input = arguments.getInput();
         QuickSort.sort(input);
         Assertions.assertArrayEquals(arguments.getExpectedOutput(), input);
@@ -26,7 +26,7 @@ public class QuickSortTest {
     @DisplayName("QuickSort Test - Even Number of Elements")
     @ParameterizedTest(name = "Running permutation {index} of 4!")
     @ArgumentsSource(SortInputEvenProvider.class)
-    void sortDistinctArrayWithEvenElements(SortData arguments) {
+    void sortDistinctArrayWithEvenElements(TestData arguments) {
         Integer[] input = arguments.getInput();
         QuickSort.sort(input);
         Assertions.assertArrayEquals(arguments.getExpectedOutput(), input);
@@ -35,7 +35,7 @@ public class QuickSortTest {
     @DisplayName("QuickSort Test - Collection with duplicates")
     @ParameterizedTest(name = "Running permutation {index}")
     @ArgumentsSource(SortInputDuplicatesProvider.class)
-    void sortArrayWithDuplicates(SortData arguments) {
+    void sortArrayWithDuplicates(TestData arguments) {
         Integer[] input = arguments.getInput();
         QuickSort.sort(input);
         Assertions.assertArrayEquals(arguments.getExpectedOutput(), input);

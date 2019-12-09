@@ -5,11 +5,14 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ArgumentsSource;
 import org.junit.jupiter.params.provider.ArgumentsSources;
-import tests.input.SortData;
+import org.junit.platform.runner.JUnitPlatform;
+import org.junit.runner.RunWith;
+import tests.input.TestData;
 import tests.input.SortInputDuplicatesProvider;
 import tests.input.SortInputEvenProvider;
 import tests.input.SortInputOddProvider;
 
+@RunWith(JUnitPlatform.class)
 public class InsertionSortTest {
 
     @DisplayName("Insertion Sort Test")
@@ -19,7 +22,7 @@ public class InsertionSortTest {
             @ArgumentsSource(SortInputEvenProvider.class),
             @ArgumentsSource(SortInputDuplicatesProvider.class)
     })
-    void sort(SortData arguments) {
+    void sort(TestData arguments) {
         Integer[] input = arguments.getInput();
         InsertionSort.sort(input);
         Assertions.assertArrayEquals(arguments.getExpectedOutput(), input);

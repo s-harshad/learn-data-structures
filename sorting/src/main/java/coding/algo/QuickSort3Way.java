@@ -2,6 +2,7 @@ package coding.algo;
 
 /**
  * Implementation of 3 Way Quick Sort Algorithm.
+ *
  * @author Harshad Shrishrimal
  */
 public final class QuickSort3Way {

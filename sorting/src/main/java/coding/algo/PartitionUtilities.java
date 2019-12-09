@@ -1,13 +1,16 @@
 package coding.algo;
 
 /**
+ * Class that exposes methods related to paritioning a given collection
+ *
  * @author Harshad Shrishrimal
  */
 final class PartitionUtilities {
 
     // private Constructor.
     // Object cannot be instantiated
-    private PartitionUtilities() { }
+    private PartitionUtilities() {
+    }
 
     /**
      * Partition the sub-array array[startIndex ..... endIndex], so that

@@ -2,12 +2,12 @@ package tests.input;
 
 import java.util.Arrays;
 
-public final class SortData {
+public final class TestData {
 
     final Integer[] input;
     final Integer[] expectedOutput;
 
-    public SortData(Integer[] input, Integer[] expectedOutput) {
+    public TestData(Integer[] input, Integer[] expectedOutput) {
         this.input = input;
         this.expectedOutput = expectedOutput;
     }

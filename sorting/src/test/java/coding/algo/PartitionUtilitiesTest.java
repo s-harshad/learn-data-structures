@@ -7,7 +7,7 @@ import org.junit.jupiter.params.provider.ArgumentsSource;
 import org.junit.jupiter.params.provider.ArgumentsSources;
 import org.junit.platform.runner.JUnitPlatform;
 import org.junit.runner.RunWith;
-import tests.input.SortData;
+import tests.input.TestData;
 import tests.input.SortInputDuplicatesProvider;
 import tests.input.SortInputEvenProvider;
 import tests.input.SortInputOddProvider;
@@ -23,7 +23,7 @@ public class PartitionUtilitiesTest {
             @ArgumentsSource(SortInputEvenProvider.class),
             @ArgumentsSource(SortInputOddProvider.class)
     })
-    void testPartitionOfAnArray(SortData arguments) {
+    void testPartitionOfAnArray(TestData arguments) {
         //make a copy of the array
         Integer[] inputCopy = arguments.getInput();
 
@@ -42,7 +42,7 @@ public class PartitionUtilitiesTest {
             @ArgumentsSource(SortInputEvenProvider.class),
             @ArgumentsSource(SortInputOddProvider.class),
     })
-    void testPartitionOfAnArray3WayDistinctElements(SortData arguments) {
+    void testPartitionOfAnArray3WayDistinctElements(TestData arguments) {
         //make a copy of the array
         Integer[] inputCopy = arguments.getInput();
 
@@ -64,7 +64,7 @@ public class PartitionUtilitiesTest {
     @ArgumentsSources({
             @ArgumentsSource(SortInputDuplicatesProvider.class)
     })
-    void testPartitionOfAnArray3WayDuplicateElements(SortData arguments) {
+    void testPartitionOfAnArray3WayDuplicateElements(TestData arguments) {
         //make a copy of the array
         Integer[] inputCopy = arguments.getInput();
         int element0 = inputCopy[0];
