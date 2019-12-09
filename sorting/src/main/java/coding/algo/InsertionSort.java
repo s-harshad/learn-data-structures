@@ -26,7 +26,7 @@ public final class InsertionSort {
      * @param array array to sort
      */
     public static final <T extends Comparable<T>> void sort(T[] array) {
-        // remove one element form input date
+        // remove one element from input data
         // find location where it belongs & insert it there
         // repeat till no elements remain
         for (int i = 1; i < array.length; i++) {
