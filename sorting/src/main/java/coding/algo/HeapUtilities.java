@@ -79,7 +79,17 @@ public final class HeapUtilities {
         return true;
     }
 
-    private static <T> void heapify(T[] array, Comparator<T> comparator, int idxRoot, int numberOfElement) {
+    /**
+     * Build a Binary Heap, for the given collection.
+     * With this method, user can specify total number of elements to consider for heap creation.
+     *
+     * @param array
+     * @param comparator      comparision criteria; specifies MAX or MIN heap
+     * @param idxRoot         where to start the heap to build from. Usually it's root. {@code 0}
+     * @param numberOfElement number of elements to consider. Usually it's total elements in collection.
+     * @param <T>             generic class
+     */
+    static final <T> void heapify(T[] array, Comparator<T> comparator, int idxRoot, int numberOfElement) {
 
         // given the current root {@code idxRoot} find, which is max of the 3 elements
         // root, left child or right child.
