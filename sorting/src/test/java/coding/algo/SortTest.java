@@ -2,6 +2,7 @@ package coding.algo;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ArgumentsSource;
 import org.junit.jupiter.params.provider.ArgumentsSources;
@@ -11,6 +12,8 @@ import tests.input.SortInputDuplicatesProvider;
 import tests.input.SortInputEvenProvider;
 import tests.input.SortInputOddProvider;
 import tests.input.TestData;
+
+import java.util.Arrays;
 
 @RunWith(JUnitPlatform.class)
 public class SortTest {
@@ -82,10 +85,40 @@ public class SortTest {
 
     @DisplayName("QuickSort3Way Test")
     @ParameterizedTest(name = "Running permutation {index}")
-    @ArgumentsSource(SortInputOddProvider.class)
+    @ArgumentsSources({
+            @ArgumentsSource(SortInputOddProvider.class),
+            @ArgumentsSource(SortInputEvenProvider.class),
+            @ArgumentsSource(SortInputDuplicatesProvider.class)
+    })
     void quickSort3WayTest(TestData arguments) {
         Integer[] input = arguments.getInput();
         QuickSort3Way.sort(input);
+        Assertions.assertArrayEquals(arguments.getExpectedOutput(), input);
+    }
+
+    @DisplayName("MergeSort Bottom Up Test")
+    @ParameterizedTest(name = "Running permutation {index}")
+    @ArgumentsSources({
+            @ArgumentsSource(SortInputOddProvider.class),
+            @ArgumentsSource(SortInputEvenProvider.class),
+            @ArgumentsSource(SortInputDuplicatesProvider.class)
+    })
+    void mergeSortBottomUpTest(TestData arguments) {
+        Integer[] input = arguments.getInput();
+        MergeSortBottomUp.sort(input);
+        Assertions.assertArrayEquals(arguments.getExpectedOutput(), input);
+    }
+
+    @DisplayName("MergeSort Top Down Test")
+    @ParameterizedTest(name = "Running permutation {index}")
+    @ArgumentsSources({
+            @ArgumentsSource(SortInputOddProvider.class),
+            @ArgumentsSource(SortInputEvenProvider.class),
+            @ArgumentsSource(SortInputDuplicatesProvider.class)
+    })
+    void mergeSortTopDownTest(TestData arguments) {
+        Integer[] input = arguments.getInput();
+        MergeSortTopDown.sort(input);
         Assertions.assertArrayEquals(arguments.getExpectedOutput(), input);
     }
 }

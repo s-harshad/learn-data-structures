@@ -67,4 +67,43 @@ final class Utilities {
     static final <T> boolean less(T[] array, Comparator<T> comparator, int firstIndex, int secondIndex) {
         return comparator.compare(array[firstIndex], array[secondIndex]) < 0;
     }
+
+    /**
+     * Merge Sorted Arrays.
+     *
+     * @param array Collection that contains data
+     * @param lo    start of array
+     * @param mid   mid. Indicates where the first array ends.
+     * @param hi    end of array
+     * @param <T>   generic class
+     */
+    static final <T extends Comparable<T>> void merge(Comparable[] array, int lo, int mid, int hi) {
+
+        int leftIndx = lo;
+        int rightIndx = mid + 1;
+
+        // short optimization
+        if (rightIndx <= hi && !Utilities.less(array, rightIndx, mid)) {
+            return; // no need to merge. everything is in order.
+        }
+
+        // copy to an auxillary array
+        Comparable<T>[] aux = new Comparable[array.length];
+        for (int i = lo; i <= hi; i++) {
+            aux[i] = array[i];
+        }
+
+        for (int k = lo; k <= hi; k++) {
+            if (leftIndx > mid) { // left array is complete merge everything from right
+                array[k] = aux[rightIndx++];
+            } else if (rightIndx > hi) { // right array is complete merge everything from left
+                array[k] = aux[leftIndx++];
+            } else if (less(aux, leftIndx, rightIndx)) { // check which is smaller
+                array[k] = aux[leftIndx++];
+            } else {
+                array[k] = aux[rightIndx++];
+            }
+        }
+
+    }
 }
