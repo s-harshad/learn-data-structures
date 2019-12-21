@@ -1,4 +1,4 @@
-package tests.input;
+package coding.algo;
 
 import java.util.Arrays;
 import java.util.Collection;

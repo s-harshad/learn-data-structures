@@ -8,8 +8,6 @@ import org.junit.jupiter.params.provider.ArgumentsSource;
 import org.junit.jupiter.params.provider.ArgumentsSources;
 import org.junit.platform.runner.JUnitPlatform;
 import org.junit.runner.RunWith;
-import tests.input.HeapifyInputProvider;
-import tests.input.TestData;
 
 import java.util.Comparator;
 

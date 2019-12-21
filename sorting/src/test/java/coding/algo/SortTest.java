@@ -8,12 +8,6 @@ import org.junit.jupiter.params.provider.ArgumentsSource;
 import org.junit.jupiter.params.provider.ArgumentsSources;
 import org.junit.platform.runner.JUnitPlatform;
 import org.junit.runner.RunWith;
-import tests.input.SortInputDuplicatesProvider;
-import tests.input.SortInputEvenProvider;
-import tests.input.SortInputOddProvider;
-import tests.input.TestData;
-
-import java.util.Arrays;
 
 @RunWith(JUnitPlatform.class)
 public class SortTest {
@@ -121,4 +115,37 @@ public class SortTest {
         MergeSortTopDown.sort(input);
         Assertions.assertArrayEquals(arguments.getExpectedOutput(), input);
     }
+
+    @DisplayName("LSD Sort Integer Test")
+    @ParameterizedTest(name = "Running permutation {index}")
+    @ArgumentsSources({
+            @ArgumentsSource(SortInputOddProvider.class),
+            @ArgumentsSource(SortInputEvenProvider.class),
+            @ArgumentsSource(SortInputDuplicatesProvider.class)
+    })
+    void LSDSort_Integer_Test(TestData arguments) {
+        Integer[] input = arguments.getInput();
+        LSDSort.sort(input);
+        Assertions.assertArrayEquals(arguments.getExpectedOutput(), input);
+    }
+
+
+    @DisplayName("LSD Sort String Test")
+    @Test
+    void LSDSort_Strings_Test() {
+        String[] input = new String[]{"bpeg", "xsdx", "mhjs", "nzks", "gxwy", "pbqu", "ikfn", "hxwt", "kzmc", "oqpv", "xive", "xkov", "jiia", "jkgq", "ipcz", "kmtj", "hlrm", "godj", "vklm", "ajyg", "uyxh", "ytrl", "tkdo", "jwxq", "awka"};
+        String[] expectedOutput = new String[]{"ajyg", "awka", "bpeg", "godj", "gxwy", "hlrm", "hxwt", "ikfn", "ipcz", "jiia", "jkgq", "jwxq", "kmtj", "kzmc", "mhjs", "nzks", "oqpv", "pbqu", "tkdo", "uyxh", "vklm", "xive", "xkov", "xsdx", "ytrl"};
+        LSDSort.sort(input);
+        Assertions.assertArrayEquals(expectedOutput, input);
+    }
+
+    @DisplayName("MSD Sort String Test")
+    @Test
+    void MSDSort_Strings_Test() {
+        String[] input = new String[]{"bpeg", "xsdx", "mhjs", "nzks", "gxwy", "pbqu", "ikfn", "hxwt", "kzmc", "oqpv", "xive", "xkov", "jiia", "jkgq", "ipcz", "kmtj", "hlrm", "godj", "vklm", "ajyg", "uyxh", "ytrl", "tkdo", "jwxq", "awka"};
+        String[] expectedOutput = new String[]{"ajyg", "awka", "bpeg", "godj", "gxwy", "hlrm", "hxwt", "ikfn", "ipcz", "jiia", "jkgq", "jwxq", "kmtj", "kzmc", "mhjs", "nzks", "oqpv", "pbqu", "tkdo", "uyxh", "vklm", "xive", "xkov", "xsdx", "ytrl"};
+        MSDSort.sort(input);
+        Assertions.assertArrayEquals(expectedOutput, input);
+    }
+
 }

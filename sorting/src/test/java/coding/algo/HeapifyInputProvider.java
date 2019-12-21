@@ -1,4 +1,4 @@
-package tests.input;
+package coding.algo;
 
 import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.jupiter.params.provider.Arguments;
