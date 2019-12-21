@@ -1,4 +1,4 @@
-package coding.algo;
+package coding.sort;
 
 import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.jupiter.params.provider.Arguments;

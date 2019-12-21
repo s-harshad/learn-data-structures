@@ -1,15 +1,15 @@
-package coding.algo;
+package coding.sort;
 
 /**
- * Implementation of Quick Sort Algorithm.
+ * Implementation of 3 Way Quick Sort Algorithm.
  *
  * @author Harshad Shrishrimal
  */
-public final class QuickSort {
+public final class QuickSort3Way {
 
     // private Constructor.
     // Object cannot be instantiated
-    private QuickSort() {
+    private QuickSort3Way() {
     }
 
     /**
@@ -30,12 +30,12 @@ public final class QuickSort {
         if (lo >= hi)
             return;
 
-        // partition the array
-        int indexOfPartitionedElement = PartitionUtilities.partition(array, lo, hi);
+        // partition the array, and get the indices where the partitioned elements are equal
+        int[] indices = PartitionUtilities.partitionDuplicateEntriesInArray(array, lo, hi);
 
         // recursively sort the left and right side, excluding partitioned element
-        sort(array, lo, indexOfPartitionedElement - 1);
-        sort(array, indexOfPartitionedElement + 1, hi);
+        sort(array, lo, indices[0] - 1);
+        sort(array, indices[1] + 1, hi);
     }
 
 }

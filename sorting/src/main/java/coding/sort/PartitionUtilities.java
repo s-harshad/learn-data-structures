@@ -1,4 +1,4 @@
-package coding.algo;
+package coding.sort;
 
 /**
  * Class that exposes methods related to paritioning a given collection

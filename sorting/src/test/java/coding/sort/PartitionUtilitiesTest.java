@@ -1,4 +1,4 @@
-package coding.algo;
+package coding.sort;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;

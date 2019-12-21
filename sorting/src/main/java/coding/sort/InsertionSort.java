@@ -1,4 +1,4 @@
-package coding.algo;
+package coding.sort;
 
 /**
  * Implementation of Insertion Sort algorithm.

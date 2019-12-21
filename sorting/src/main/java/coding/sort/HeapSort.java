@@ -1,6 +1,4 @@
-package coding.algo;
-
-import java.util.Comparator;
+package coding.sort;
 
 /**
  * Implementation of Heap Sort Algorithm.

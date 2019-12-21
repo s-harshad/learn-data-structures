@@ -1,3 +1,3 @@
 module sorting {
-    exports coding.algo;
+    exports coding.sort;
 }
