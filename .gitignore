@@ -23,6 +23,6 @@
 hs_err_pid*
 
 .idea
-learn.datastructures.iml
-sorting/sorting.iml
-sorting/target
+*/target
+*.iml
+

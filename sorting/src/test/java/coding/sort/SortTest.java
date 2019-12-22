@@ -1,5 +1,9 @@
 package coding.sort;
 
+import coding.providers.SortInputDuplicatesProvider;
+import coding.providers.SortInputEvenProvider;
+import coding.providers.SortInputOddProvider;
+import coding.providers.TestData;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

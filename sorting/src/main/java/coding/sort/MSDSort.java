@@ -5,7 +5,7 @@ package coding.sort;
  *
  * @author Harshad Shrishrimal
  */
-public class MSDSort {
+public final class MSDSort {
 
     private static final int R = 256;   // extended ASCII alphabet size
     private final static int BITS_PER_INT = 32; // each integer is 32 bits / 4 bytes

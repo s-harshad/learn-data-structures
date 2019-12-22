@@ -1,4 +1,4 @@
-package coding.sort;
+package coding.providers;
 
 import java.util.Arrays;
 import java.util.Collection;
