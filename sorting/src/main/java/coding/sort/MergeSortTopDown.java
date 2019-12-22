@@ -1,5 +1,7 @@
 package coding.sort;
 
+import coding.util.CompareUtilities;
+
 /**
  * Implementation of Merge Sort
  *
@@ -31,7 +33,7 @@ public final class MergeSortTopDown {
         sort(array, mid + 1, hi);
 
         // merge
-        Utilities.merge(array, lo, mid, hi);
+        CompareUtilities.merge(array, lo, mid, hi);
     }
 
 }

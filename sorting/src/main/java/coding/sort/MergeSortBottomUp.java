@@ -1,5 +1,7 @@
 package coding.sort;
 
+import coding.util.CompareUtilities;
+
 /**
  * Implementation of Merge Sort
  *
@@ -26,7 +28,7 @@ public final class MergeSortBottomUp {
             for (int lo = 0; lo < N; lo = lo + sz + sz) {
                 int hi = Math.min(N - 1, lo + sz + sz - 1);
                 int mid = lo + sz - 1;
-                Utilities.merge(array, lo, mid, hi);
+                CompareUtilities.merge(array, lo, mid, hi);
             }
         }
     }

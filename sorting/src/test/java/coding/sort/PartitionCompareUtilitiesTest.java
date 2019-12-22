@@ -14,7 +14,7 @@ import org.junit.runner.RunWith;
 
 
 @RunWith(JUnitPlatform.class)
-public class PartitionUtilitiesTest {
+public class PartitionCompareUtilitiesTest {
 
 
     @DisplayName("PartitionUtilities Test")

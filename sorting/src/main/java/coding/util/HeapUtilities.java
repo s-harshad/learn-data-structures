@@ -1,4 +1,6 @@
-package coding.sort;
+package coding.util;
+
+import coding.util.CompareUtilities;
 
 import java.util.Comparator;
 
@@ -21,7 +23,7 @@ public final class HeapUtilities {
      * @param comparator comparision criteria; specifies MAX or MIN heap
      * @param <T>        generic class
      */
-    static final <T> void heapify(T[] array, Comparator<T> comparator) {
+    public static final <T> void heapify(T[] array, Comparator<T> comparator) {
         // start is the index of the last parent / non-leaf node in the binary tree
         int N = array.length - 1; // last index in array
         int start = (N - 1) / 2;
@@ -41,7 +43,7 @@ public final class HeapUtilities {
      * @param <T>        generic class
      * @return {@code true} if collection is Heapified {@code false} otherwise.
      */
-    static final <T> boolean isArrayHeapified(T[] array, Comparator<T> comparator) {
+    public static final <T> boolean isArrayHeapified(T[] array, Comparator<T> comparator) {
 
         int TOTAL_ELEMENTS = array.length;
 
@@ -62,12 +64,12 @@ public final class HeapUtilities {
 
             // left child exists; do the comparison with root.
             if (idxLeftChild < TOTAL_ELEMENTS) {
-                compareRootWithLeftChild = Utilities.lessOrEqual(array, comparator, idxLeftChild, idxRoot);
+                compareRootWithLeftChild = CompareUtilities.lessOrEqual(array, comparator, idxLeftChild, idxRoot);
             }
 
             // right child exists; do the comparison with root
             if (idxRightChild < TOTAL_ELEMENTS) {
-                compareRootWithRightChild = Utilities.lessOrEqual(array, comparator, idxRightChild, idxRoot);
+                compareRootWithRightChild = CompareUtilities.lessOrEqual(array, comparator, idxRightChild, idxRoot);
             }
 
             if (!(compareRootWithLeftChild && compareRootWithRightChild)) {
@@ -82,6 +84,7 @@ public final class HeapUtilities {
     /**
      * Build a Binary Heap, for the given collection.
      * With this method, user can specify total number of elements to consider for heap creation.
+     * This method is sometimes also called Top Down Heapify
      *
      * @param array
      * @param comparator      comparision criteria; specifies MAX or MIN heap
@@ -89,7 +92,7 @@ public final class HeapUtilities {
      * @param numberOfElement number of elements to consider. Usually it's total elements in collection.
      * @param <T>             generic class
      */
-    static final <T> void heapify(T[] array, Comparator<T> comparator, int idxRoot, int numberOfElement) {
+    public static final <T> void heapify(T[] array, Comparator<T> comparator, int idxRoot, int numberOfElement) {
 
         // given the current root {@code idxRoot} find, which is max of the 3 elements
         // root, left child or right child.
@@ -101,21 +104,39 @@ public final class HeapUtilities {
 
         // 1st condition avoid IndexOutOfBounds
         // check if leftChild is greater than root
-        if (idxLeftChild < numberOfElement && Utilities.less(array, comparator, idxRoot, idxLeftChild)) {
+        if (idxLeftChild < numberOfElement && CompareUtilities.less(array, comparator, idxRoot, idxLeftChild)) {
             idxOfMaxElement = idxLeftChild;
         }
 
         // 1st condition avoid IndexOutOfBounds
         // check if rightChild is greater than current maximum
-        if (idxRightChild < numberOfElement && Utilities.less(array, comparator, idxOfMaxElement, idxRightChild)) {
+        if (idxRightChild < numberOfElement && CompareUtilities.less(array, comparator, idxOfMaxElement, idxRightChild)) {
             idxOfMaxElement = idxRightChild;
         }
 
         // if largest is not the root, then swap; and recursively heapify
         if (idxOfMaxElement != idxRoot) {
-            Utilities.exchange(array, idxOfMaxElement, idxRoot);
+            CompareUtilities.exchange(array, idxOfMaxElement, idxRoot);
             heapify(array, comparator, idxOfMaxElement, numberOfElement);
         }
 
+    }
+
+    /**
+     * Starting from the end, compare child with it's parent and exchange if necessary.
+     * This is used in insert operation of PQ
+     *
+     * @param array      collection containing the date
+     * @param startIdx   end index to start from
+     * @param comparator Comparing criteria
+     * @param <T>        generic
+     */
+    public static final <T extends Comparable<T>> void bottomUpHeapify(T[] array, int startIdx, Comparator<T> comparator) {
+        while (startIdx >= 0 && CompareUtilities.less(array, comparator, (startIdx - 1) / 2, startIdx)) {
+            // violation. exchange parent with child.
+            CompareUtilities.exchange(array, (startIdx - 1) / 2, startIdx);
+            // move up
+            startIdx = (startIdx - 1) / 2;
+        }
     }
 }

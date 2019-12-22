@@ -1,5 +1,7 @@
 package coding.sort;
 
+import coding.util.CompareUtilities;
+
 /**
  * Implementation of Selection Sort algorithm.
  *
@@ -33,13 +35,13 @@ public final class SelectionSort {
 
             // pick the minimum from the right section
             for (int right = left + 1; right < N; right++) {
-                if (Utilities.less(array, right, currentIndexOfMinimum)) {
+                if (CompareUtilities.less(array, right, currentIndexOfMinimum)) {
                     currentIndexOfMinimum = right;
                 }
             }
 
             // replace minimum with left-most element of right section
-            Utilities.exchange(array, left, currentIndexOfMinimum);
+            CompareUtilities.exchange(array, left, currentIndexOfMinimum);
         }
     }
 }

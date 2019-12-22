@@ -1,5 +1,7 @@
 package coding.sort;
 
+import coding.util.CompareUtilities;
+
 /**
  * Class that exposes methods related to paritioning a given collection
  *
@@ -35,11 +37,11 @@ final class PartitionUtilities {
             if (cmp < 0) {
                 // current element is less then the comparing element
                 // exchange and increment
-                Utilities.exchange(array, lt++, i++);
+                CompareUtilities.exchange(array, lt++, i++);
             } else if (cmp > 0) {
                 // current element is greater then the comparing element
                 // exchange and decrement
-                Utilities.exchange(array, i, gt--);
+                CompareUtilities.exchange(array, i, gt--);
             } else {
                 // both elements are equal
                 // no exchange.
@@ -73,14 +75,14 @@ final class PartitionUtilities {
             // keep incrementing leftIndex till we find a position
             // where the element is greater than startIndex.
             // break if we are reaching the end of array
-            while (Utilities.less(array, ++leftIndex, startIndex)) {
+            while (CompareUtilities.less(array, ++leftIndex, startIndex)) {
                 if (leftIndex == endIndex) break;
             }
 
             // keep decrementing rightIndex till we find a position
             // where the element is less than startIndex.
             // break if we are reaching the start of array
-            while (Utilities.less(array, startIndex, --rightIndex)) {
+            while (CompareUtilities.less(array, startIndex, --rightIndex)) {
                 if (rightIndex == startIndex) break;
             }
 
@@ -91,11 +93,11 @@ final class PartitionUtilities {
             // for the given partitioning element
             // elements at position leftIndex & rightIndex
             // are out of order; swap them
-            Utilities.exchange(array, leftIndex, rightIndex);
+            CompareUtilities.exchange(array, leftIndex, rightIndex);
         }
 
         // put the partitioning element in its position
-        Utilities.exchange(array, startIndex, rightIndex);
+        CompareUtilities.exchange(array, startIndex, rightIndex);
 
         // rightIndex is the position of the partitioned element
         return rightIndex;

@@ -1,5 +1,7 @@
 package coding.sort;
 
+import coding.util.CompareUtilities;
+
 /**
  * Implementation of Shell Sort
  *
@@ -31,8 +33,8 @@ public final class ShellSort {
         for (; h >= 1; h = h / 3) {
             // h-sort the array, using insertion sort.
             for (int i = h; i < N; i++) {
-                for (int j = i; j >= h && Utilities.less(array, j, j - h); j = j - h) {
-                    Utilities.exchange(array, j, j - h);
+                for (int j = i; j >= h && CompareUtilities.less(array, j, j - h); j = j - h) {
+                    CompareUtilities.exchange(array, j, j - h);
                 }
             }
             h = h / 3;

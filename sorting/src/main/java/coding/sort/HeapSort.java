@@ -1,5 +1,8 @@
 package coding.sort;
 
+import coding.util.CompareUtilities;
+import coding.util.HeapUtilities;
+
 /**
  * Implementation of Heap Sort Algorithm.
  *
@@ -27,7 +30,7 @@ public final class HeapSort {
         //reduce the size of heap by 1 and repeat
         int n = array.length - 1;
         while (n >= 0) {
-            Utilities.exchange(array, 0, n);
+            CompareUtilities.exchange(array, 0, n);
             HeapUtilities.heapify(array, Comparable::compareTo, 0, n--);
         }
     }

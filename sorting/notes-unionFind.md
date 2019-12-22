@@ -47,3 +47,8 @@ int find(int p) {
     return p;
 }
 ```
+
+                  root at 0       root at 1
+Left child        index*2 + 1     index*2
+Right child       index*2 + 2     index*2 + 1
+Parent            (index-1)/2     index/2

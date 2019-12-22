@@ -1,5 +1,7 @@
 package coding.sort;
 
+import coding.util.CompareUtilities;
+
 /**
  * Implementation of Insertion Sort algorithm.
  * To Sort a randomly-ordered array with distinct keys,
@@ -30,8 +32,8 @@ public final class InsertionSort {
         // find location where it belongs & insert it there
         // repeat till no elements remain
         for (int i = 1; i < array.length; i++) {
-            for (int j = i; j > 0 && Utilities.less(array, j, j - 1); j--) {
-                Utilities.exchange(array, j, j - 1);
+            for (int j = i; j > 0 && CompareUtilities.less(array, j, j - 1); j--) {
+                CompareUtilities.exchange(array, j, j - 1);
             }
         }
     }
