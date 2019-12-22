@@ -12,7 +12,7 @@
 
     <modules>
         <module>sorting</module>
-        <module>unionfind</module>
+
     </modules>
 
     <properties>
