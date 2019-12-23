@@ -48,5 +48,23 @@ public class SimpleTrieSTTest {
     st.delete("cat");
     Assertions.assertEquals(3, st.size());
     Assertions.assertNull(st.get("cat"));
+
+    st.delete("cam");
+    st.delete("cargo");
+    st.delete("car");
+  }
+
+  @Test
+  @DisplayName("test of contains operation")
+  void test4() {
+    SimpleTrieST<String> st = new SimpleTrieST<>();
+    st.put("car", "kia");
+    st.put("cargo", "pants");
+    st.put("cam", "nikkon");
+    st.put("cat", "nope");
+
+    Assertions.assertTrue(st.contains("car"));
+    Assertions.assertEquals(false, st.contains("ca"));
+    Assertions.assertEquals(false, st.contains("c"));
   }
 }

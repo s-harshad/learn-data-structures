@@ -92,7 +92,7 @@ public final class SimpleTrieST<T> {
     // remove subtries, if it is completely empty
     for (int i = nodes.length - 1; i > 0; i--) {
       if (isNodeCompletelyEmpty(nodes[i])) {
-        Node prev = nodes[i - 1];
+        Node<T> prev = nodes[i - 1];
         int c = characterAtIndex(key, i - 1);
         prev.next[c] = null;
       } else {
@@ -176,8 +176,8 @@ public final class SimpleTrieST<T> {
    * @param n node
    * @return new node or existing one if it exists.
    */
-  private final Node retrieveExistingOrCreateNewNode(Node n) {
-    if (n == null) return new Node();
+  private final Node<T> retrieveExistingOrCreateNewNode(Node<T> n) {
+    if (n == null) return new Node<T>();
     return n;
   }
 }
