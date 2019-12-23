@@ -17,37 +17,33 @@ import java.util.Comparator;
 @RunWith(JUnitPlatform.class)
 public class HeapCompareUtilitiesTest {
 
-    @DisplayName("HeapUtilities MAX Heapify Test")
-    @ParameterizedTest(name = "Running permutation {index}")
-    @ArgumentsSources({
-            @ArgumentsSource(HeapifyInputProvider.class)
-    })
-    void maxHeapifyTest(TestData arguments) {
-        Integer[] input = arguments.getInput();
-        Comparator<Integer> comparator = Integer::compareTo; // max heap
-        HeapUtilities.heapify(input, comparator);
-        Assertions.assertEquals(true, HeapUtilities.isArrayHeapified(input, comparator));
-    }
+  @DisplayName("HeapUtilities MAX Heapify Test")
+  @ParameterizedTest(name = "Running permutation {index}")
+  @ArgumentsSources({@ArgumentsSource(HeapifyInputProvider.class)})
+  void maxHeapifyTest(TestData arguments) {
+    Integer[] input = arguments.getInput();
+    Comparator<Integer> comparator = Integer::compareTo; // max heap
+    HeapUtilities.heapify(input, comparator);
+    Assertions.assertEquals(true, HeapUtilities.isArrayHeapified(input, comparator));
+  }
 
-    @DisplayName("HeapUtilities MIN Heapify Test")
-    @ParameterizedTest(name = "Running permutation {index}")
-    @ArgumentsSources({
-            @ArgumentsSource(HeapifyInputProvider.class)
-    })
-    void minHeapifyTest(TestData arguments) {
-        Integer[] input = arguments.getInput();
-        Comparator<Integer> comparator = Comparator.reverseOrder(); // min heap
-        HeapUtilities.heapify(input, comparator);
-        Assertions.assertEquals(true, HeapUtilities.isArrayHeapified(input, comparator));
-    }
+  @DisplayName("HeapUtilities MIN Heapify Test")
+  @ParameterizedTest(name = "Running permutation {index}")
+  @ArgumentsSources({@ArgumentsSource(HeapifyInputProvider.class)})
+  void minHeapifyTest(TestData arguments) {
+    Integer[] input = arguments.getInput();
+    Comparator<Integer> comparator = Comparator.reverseOrder(); // min heap
+    HeapUtilities.heapify(input, comparator);
+    Assertions.assertEquals(true, HeapUtilities.isArrayHeapified(input, comparator));
+  }
 
-    @Test
-    @DisplayName("should return false for isArrayHeapified")
-    void testArrayHeapified_1() {
-        Integer[] input = {10,11,1};
-        Comparator<Integer> comparator = Integer::compareTo;
-        // method under test
-        boolean actual = HeapUtilities.isArrayHeapified(input, comparator);
-        Assertions.assertEquals(false, actual);
-    }
+  @Test
+  @DisplayName("should return false for isArrayHeapified")
+  void testArrayHeapified_1() {
+    Integer[] input = {10, 11, 1};
+    Comparator<Integer> comparator = Integer::compareTo;
+    // method under test
+    boolean actual = HeapUtilities.isArrayHeapified(input, comparator);
+    Assertions.assertEquals(false, actual);
+  }
 }

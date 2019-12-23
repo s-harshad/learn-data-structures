@@ -8,11 +8,10 @@ import java.util.stream.Stream;
 
 public final class SortInputOddProvider implements ArgumentsProvider {
 
-    @Override
-    public Stream<? extends Arguments> provideArguments(ExtensionContext extensionContext) throws Exception {
+  @Override
+  public Stream<? extends Arguments> provideArguments(ExtensionContext extensionContext)
+      throws Exception {
 
-        return TestDataCreator.getData_SortTest_OddElements().stream()
-                .map(t -> Arguments.of(t));
-
-    }
+    return TestDataCreator.getData_SortTest_OddElements().stream().map(t -> Arguments.of(t));
+  }
 }
