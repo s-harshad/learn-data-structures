@@ -1,10 +1,9 @@
 package coding.providers;
 
+import java.util.stream.Stream;
 import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.ArgumentsProvider;
-
-import java.util.stream.Stream;
 
 public final class SortInputEvenProvider implements ArgumentsProvider {
 

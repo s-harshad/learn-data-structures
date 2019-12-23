@@ -1,7 +1,6 @@
 package coding.pq;
 
 import coding.util.HeapUtilities;
-
 import java.util.Comparator;
 import java.util.NoSuchElementException;
 import java.util.Optional;
