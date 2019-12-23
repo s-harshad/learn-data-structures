@@ -3,6 +3,7 @@ package coding.sort;
 import coding.providers.HeapifyInputProvider;
 import coding.providers.TestData;
 import coding.util.HeapUtilities;
+import java.util.Comparator;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -11,8 +12,6 @@ import org.junit.jupiter.params.provider.ArgumentsSource;
 import org.junit.jupiter.params.provider.ArgumentsSources;
 import org.junit.platform.runner.JUnitPlatform;
 import org.junit.runner.RunWith;
-
-import java.util.Comparator;
 
 @RunWith(JUnitPlatform.class)
 public class HeapCompareUtilitiesTest {
