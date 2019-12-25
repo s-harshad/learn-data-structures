@@ -16,6 +16,7 @@ public final class SimpleTrieST<T> {
   private Node<T> root; // root of trie
   private int n; // number of keys in trie
 
+
   /**
    * Returns the value associated with the given key.
    *
