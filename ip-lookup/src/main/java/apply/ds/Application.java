@@ -1,6 +1,7 @@
 package apply.ds;
 
-import coding.trie.SimpleTrieST;
+import coding.trie.BasicTrieIPKeys;
+import coding.trie.Trie;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -9,7 +10,6 @@ import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
-import java.util.TreeMap;
 import java.util.stream.Stream;
 
 /**
@@ -25,7 +25,7 @@ public class Application {
   private Map<String, CountryModel> countryMapByCountryCode = new HashMap<>(60);
 
   // our trie data-structure
-  private final SimpleTrieST<CountryModel> trie = new SimpleTrieST<>();
+  private final Trie<CountryModel> trie = new BasicTrieIPKeys<>();
 
   // this object is returned to user, when data is not found in trie
   private static final CountryModel NOT_FOUND = new CountryModel("NA", "NOT FOUND");
@@ -90,8 +90,7 @@ public class Application {
 
     // convert decimal ip to actual ip and insert into trie.
     // we are only inserting the 1st 3 parts.
-    String ip = first3PartsOfIPOnly(longToIp(data[0]));
-    trie.put(ip, countryMapByCountryCode.get(data[2]));
+    trie.put(first3PartsOfIPOnly(longToIp(data[0])), countryMapByCountryCode.get(data[2]));
   }
 
   /**

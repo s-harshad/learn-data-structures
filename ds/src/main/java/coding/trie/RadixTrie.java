@@ -1,6 +1,7 @@
 package coding.trie;
 
 import java.io.Serializable;
+import java.util.Set;
 import java.util.TreeSet;
 
 public class RadixTrie {
@@ -17,7 +18,25 @@ public class RadixTrie {
     put(key, value, root);
   }
 
-  public void put(String key, Object value, Node node) {
+  public Object get(String key) {
+    Node x = get(key, root);
+    return x == null ? null : x.value;
+  }
+
+  Node get(String key, Node current) {
+
+    if (key.isBlank() || key.isEmpty()) return current; //exit condition
+
+    if (isPrefixSharedByAnyChild(key, current)) {
+      current = nodeWherePrefixIsShared(key, current);
+      key = key.substring(largestPrefixLength(key, current.prefix));
+      return get(key, current);
+    }
+
+    return null;
+  }
+
+  void put(String key, Object value, Node node) {
 
     if (!isPrefixSharedByAnyChild(key, node)) {
       node.childerns.add(put(null, key, value, false));
@@ -45,11 +64,11 @@ public class RadixTrie {
         String commonPrefix = n.prefix.substring(0, len);
         String leftOverPrefix = n.prefix.substring(len);
 
-        if(!leftOverPrefix.isEmpty() && !leftOverPrefix.isBlank()) {
+        if (!leftOverPrefix.isEmpty() && !leftOverPrefix.isBlank()) {
           Node newNode = put(null, leftOverPrefix, n.value, true);
-//          newNode.childerns.addAll(n.childerns);
-//          n.childerns.clear();
-//          n.childerns.add(newNode);
+          //          newNode.childerns.addAll(n.childerns);
+          //          n.childerns.clear();
+          //          n.childerns.add(newNode);
           newNode.childerns = n.childerns;
           n.childerns = new TreeSet();
           n.childerns.add(newNode);
@@ -122,7 +141,7 @@ public class RadixTrie {
 
     // st.put("cat", "nope");
     st.put("cargo", "");
-    st.put("cars", "");
+    st.put("cars", "Honda Kia");
     st.put("car", "");
     st.put("computer", "");
     st.put("cargo", "");
@@ -131,6 +150,37 @@ public class RadixTrie {
     st.put("name", "");
     st.put("compute", "");
     st.put("commute", "");
+
+    //System.out.println("st.get(\"cars\") = " + st.get("cars"));
+    System.out.println("st.get(\"cari\") = " + st.get("cari"));
+
     dumpTree(st.root, "");
+  }
+
+  static class Node implements Comparable<Node> {
+    String prefix = "";
+    Object value;
+    boolean hasValue;
+    Set<Node> childerns = new TreeSet<>();
+
+    @Override
+    public String toString() {
+      return "Node{"
+          + "prefix='"
+          + prefix
+          + '\''
+          + ", value="
+          + value
+          + ", hasValue="
+          + hasValue
+          + ", childerns="
+          + childerns
+          + '}';
+    }
+
+    @Override
+    public int compareTo(Node node) {
+      return this.prefix.compareTo(node.prefix);
+    }
   }
 }
