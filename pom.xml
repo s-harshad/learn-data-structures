@@ -11,7 +11,8 @@
     <name>learning-data-structures</name>
 
     <modules>
-        <module>sorting</module>
+        <module>ds</module>
+        <module>ip-lookup</module>
 
     </modules>
 
