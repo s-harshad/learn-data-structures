@@ -2,7 +2,6 @@ package coding.trie;
 
 public abstract class Trie<T> {
 
-  protected Node<T> root; // root of trie
   protected int n; // number of keys in trie
 
   /**

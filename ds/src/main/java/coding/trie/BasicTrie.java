@@ -4,8 +4,8 @@ import java.util.ArrayDeque;
 import java.util.Queue;
 
 public class BasicTrie<T> extends Trie<T> {
-
   private static final int R = 256; // Extended ASCII
+  protected Node<T> root; // root of trie
 
   /**
    * Inserts the key-value pair into the symbol table, overwriting the old value with the new value

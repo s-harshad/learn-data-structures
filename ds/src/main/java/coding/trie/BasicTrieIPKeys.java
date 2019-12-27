@@ -7,6 +7,7 @@ package coding.trie;
  */
 public class BasicTrieIPKeys<T> extends BasicTrie<T> {
 
+  protected Node<T> root; // root of trie
   /**
    * Inserts the key-value pair into the symbol table, overwriting the old value with the new value
    * if the key is already in the symbol table. If the value is {@code null}, this effectively
@@ -20,7 +21,7 @@ public class BasicTrieIPKeys<T> extends BasicTrie<T> {
   public final void put(String key, T value) {
     validateKey(key);
     root = retrieveExistingOrCreateNewNode(root);
-    Node<T> node = root;     // start from root
+    Node<T> node = root; // start from root
 
     String[] keyParts = key.split("\\.");
     // for each keyPart, create/append nodes to existing chain

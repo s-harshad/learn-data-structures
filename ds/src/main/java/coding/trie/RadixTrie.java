@@ -1,186 +1,330 @@
 package coding.trie;
 
-import java.io.Serializable;
+import coding.trie.RadixTrie.SearchResult.Classification;
+import java.io.IOException;
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Queue;
 import java.util.Set;
 import java.util.TreeSet;
 
-public class RadixTrie {
+public class RadixTrie<T> extends Trie<T> {
 
-  private Node root;
-  private int n;
+  RadixNode<T> root = new RadixNode<>();
 
-  public void put(String key, Object value) {
-    if (root == null) {
-      root = new Node();
-      root.childerns.add(put(null, key, value, false));
-      return;
-    }
-    put(key, value, root);
-  }
-
-  public Object get(String key) {
-    Node x = get(key, root);
-    return x == null ? null : x.value;
-  }
-
-  Node get(String key, Node current) {
-
-    if (key.isBlank() || key.isEmpty()) return current; //exit condition
-
-    if (isPrefixSharedByAnyChild(key, current)) {
-      current = nodeWherePrefixIsShared(key, current);
-      key = key.substring(largestPrefixLength(key, current.prefix));
-      return get(key, current);
-    }
-
-    return null;
-  }
-
-  void put(String key, Object value, Node node) {
-
-    if (!isPrefixSharedByAnyChild(key, node)) {
-      node.childerns.add(put(null, key, value, false));
-      return;
-    } else {
-
-      Node n = nodeWherePrefixIsShared(key, node);
-      int len = largestPrefixLength(key, n.prefix);
-
-      // ExactMatch
-      if (key.length() == n.prefix.length() && key.length() == len) {
-        put(n, key, value, true); // update
-        return;
-      }
-
-      if (len > 0) {
-
-        if (len == n.prefix.length() && key.length() > n.prefix.length()) {
-          String leftOverKey = key.substring(len);
-          put(leftOverKey, value, n);
-          return;
-        }
-
-        // split
-        String commonPrefix = n.prefix.substring(0, len);
-        String leftOverPrefix = n.prefix.substring(len);
-
-        if (!leftOverPrefix.isEmpty() && !leftOverPrefix.isBlank()) {
-          Node newNode = put(null, leftOverPrefix, n.value, true);
-          //          newNode.childerns.addAll(n.childerns);
-          //          n.childerns.clear();
-          //          n.childerns.add(newNode);
-          newNode.childerns = n.childerns;
-          n.childerns = new TreeSet();
-          n.childerns.add(newNode);
-        }
-
-        n.prefix = commonPrefix;
-        n.value = null;
-        n.hasValue = false;
-        put(key, value, node);
-        return;
-      }
-    }
-    return;
-  }
-
-  private boolean isKeyCompletelyMatchingPrefix(String key, String prefix) {
-    int len = largestPrefixLength(key, prefix);
-    return len > 0 && len == key.length() && key.length() > prefix.length();
-  }
-
-  private Node nodeWherePrefixIsShared(String prefix, Node x) {
-    if (x == null) return null;
-    for (Node n : x.childerns) {
-      if (largestPrefixLength(prefix, n.prefix) > 0) return n;
-    }
-    return null;
-  }
-
-  private boolean isPrefixSharedByAnyChild(String prefix, Node x) {
-    if (x == null) return false;
-    for (Node n : x.childerns) {
-      if (largestPrefixLength(prefix, n.prefix) > 0) return true;
-    }
-    return false;
-  }
-
-  private Node put(Node x, String prefix, Object value, boolean isReplacing) {
-    if (!isReplacing) n++;
-    if (x == null) x = new Node();
-    x.prefix = prefix;
-    x.value = value;
-    x.hasValue = true;
-    return x;
-  }
-
-  public static int largestPrefixLength(CharSequence a, CharSequence b) {
+  public int largestPrefixLength(CharSequence a, CharSequence b) {
     int len = 0;
     int to = Math.min(a.length(), b.length());
     for (; len < to && a.charAt(len) == b.charAt(len); len++) {}
     return len;
   }
 
-  /**
-   * Prints a subtree to <code>System.out</code>.
-   *
-   * @param node the subtree
-   * @param outputPrefix prefix to be printed to output
-   */
-  static <V extends Serializable> void dumpTree(Node node, String outputPrefix) {
-    if (node.hasValue) System.out.format("%s{%s : %s}%n", outputPrefix, node.prefix, node.value);
-    else System.out.format("%s{%s}%n", outputPrefix, node.prefix, node.value);
-
-    for (Node child : node.childerns) dumpTree(child, outputPrefix + "\t");
+  public void prettyPrint(Appendable sb) {
+    prettyPrint(root, sb, "", true, true);
   }
 
-  public static void main(String[] args) {
-
-    System.out.println("Hello World");
-    RadixTrie st = new RadixTrie();
-
-    // st.put("cat", "nope");
-    st.put("cargo", "");
-    st.put("cars", "Honda Kia");
-    st.put("car", "");
-    st.put("computer", "");
-    st.put("cargo", "");
-    st.put("cam", "");
-    st.put("dummy", "");
-    st.put("name", "");
-    st.put("compute", "");
-    st.put("commute", "");
-
-    //System.out.println("st.get(\"cars\") = " + st.get("cars"));
-    System.out.println("st.get(\"cari\") = " + st.get("cari"));
-
-    dumpTree(st.root, "");
+  private void prettyPrint(
+      RadixNode node, Appendable sb, String prefix, boolean isTail, boolean isRoot) {
+    try {
+      StringBuilder label = new StringBuilder();
+      if (isRoot) label.append("○");
+      label.append(node.prefix);
+      if (node.value != null) {
+        label.append(" (").append(node.value).append(")");
+      }
+      sb.append(prefix)
+          .append(isTail ? isRoot ? "" : "└── ○ " : "├── ○ ")
+          .append(label)
+          .append("\n");
+      List<RadixNode> children = new ArrayList<>(node.outGoingNodes);
+      for (int i = 0; i < children.size() - 1; i++) {
+        prettyPrint(
+            children.get(i), sb, prefix + (isTail ? isRoot ? "" : "    " : "│   "), false, false);
+      }
+      if (!children.isEmpty()) {
+        prettyPrint(
+            children.get(children.size() - 1),
+            sb,
+            prefix + (isTail ? isRoot ? "" : "    " : "│   "),
+            true,
+            false);
+      }
+    } catch (IOException ioException) {
+      // Rethrow the checked exception as a runtime exception...
+      throw new IllegalStateException(ioException);
+    }
   }
 
-  static class Node implements Comparable<Node> {
-    String prefix = "";
-    Object value;
-    boolean hasValue;
-    Set<Node> childerns = new TreeSet<>();
+  @Override
+  public void put(String key, T value) {
+    validateKey(key);
+    put(key, value, root);
+  }
 
-    @Override
-    public String toString() {
-      return "Node{"
-          + "prefix='"
-          + prefix
-          + '\''
-          + ", value="
-          + value
-          + ", hasValue="
-          + hasValue
-          + ", childerns="
-          + childerns
-          + '}';
+  private void put(CharSequence key, T value, RadixNode<T> node) {
+
+    SearchResult searchResult = searchKey(key, node);
+    SearchResult.Classification classification = searchResult.classification;
+
+    switch (classification) {
+      case NO_MATCH:
+        // add the key/value pair as a child of this node
+        n++;
+        node.outGoingNodes.add(createNode(key, value));
+        return;
+      case EXACT_MATCH_WITH_PREFIX:
+        if (!searchResult.node.hasValue) n++;
+        searchResult.node.value = value;
+        searchResult.node.hasValue = true;
+        return;
+      case EXACT_MATCH_WITH_PREFIX_KEY_LARGER_THAN_PREFIX:
+        put(searchResult.keySuffix, value, searchResult.node);
+        return;
+      case PARTIAL_MATCH:
+        // split the node
+        // existing node prefix is going to be the matched sequence.
+        // newNode prefix will have the remaining part of the prefix. it's children will be
+        // this new node becomes children of existing node.
+        RadixNode newNode = createNode(searchResult.prefixSuffix, searchResult.node.value);
+        newNode.hasValue = searchResult.node.hasValue;
+        newNode.outGoingNodes = searchResult.node.outGoingNodes;
+
+        searchResult.node.prefix = searchResult.matchedSequence;
+        searchResult.node.value = null;
+        searchResult.node.hasValue = false;
+        searchResult.node.outGoingNodes = new TreeSet();
+        searchResult.node.outGoingNodes.add(newNode);
+        put(key, value, node);
+        return;
+    }
+  }
+
+  @Override
+  public T get(String key) {
+    validateKey(key);
+    RadixNode<T> node = get(key, root);
+    return node == null ? null : node.hasValue ? node.value : null;
+  }
+
+  private RadixNode<T> get(CharSequence prefix, RadixNode<T> node) {
+    if (prefix.length() == 0) return node; // exit condition
+
+    SearchResult searchResult = searchKey(prefix, node);
+    SearchResult.Classification classification = searchResult.classification;
+
+    switch (classification) {
+      case NO_MATCH:
+        return null;
+      default:
+        return get(searchResult.keySuffix, searchResult.node);
+    }
+  }
+
+  @Override
+  public void delete(String key) {
+    validateKey(key);
+    delete(key, root);
+  }
+
+  private void delete(CharSequence prefix, RadixNode node) {
+
+    SearchResult searchResult = searchKey(prefix, node);
+
+    if (Classification.NO_MATCH == searchResult.classification) {
+      return; // Nothing to do.
     }
 
+    if (Classification.EXACT_MATCH_WITH_PREFIX == searchResult.classification) {
+      // we found the last node
+      // check if this node has any children. if yes then we cannot remove this node
+      if (!searchResult.node.outGoingNodes.isEmpty()) {
+        searchResult.node.value = null;
+        searchResult.node.hasValue = false;
+        n--;
+        // check how many children does this node have.
+        // if only 1 then we can merge it with it's parent.
+        mergeIfApplicable(searchResult);
+        return;
+      }
+
+      // leaf node. remove it
+      if (searchResult.node.outGoingNodes.isEmpty()) {
+        searchResult.nodeParent.outGoingNodes.remove(searchResult.node);
+      }
+    }
+
+    delete(searchResult.keySuffix, searchResult.node);
+
+    // check how many children does this node have.
+    // if only 1 then we can merge it with it's parent.
+    mergeIfApplicable(searchResult);
+
+    return;
+  }
+
+  private void mergeIfApplicable(SearchResult searchResult) {
+    if (searchResult.node.outGoingNodes.size() == 1 && searchResult.node.hasValue == false) {
+      RadixNode n = (RadixNode) searchResult.node.outGoingNodes.iterator().next();
+      searchResult.node.prefix = searchResult.node.prefix.toString() + n.prefix.toString();
+      searchResult.node.hasValue = n.hasValue;
+      searchResult.node.value = n.value;
+      searchResult.node.outGoingNodes = n.outGoingNodes;
+      n.outGoingNodes = new TreeSet();
+    }
+  }
+
+  @Override
+  public Iterable<String> keys() {
+    Queue<String> results = new ArrayDeque<>();
+    RadixNode node = get("", root);
+    collect(node, new StringBuilder(), results);
+    return results;
+  }
+
+  @Override
+  public Iterable<String> keysWithPrefix(String prefix) {
+    return keysWithPrefix(prefix, root, new ArrayDeque<>(), new StringBuilder());
+  }
+
+  private Iterable<String> keysWithPrefix(
+      CharSequence prefix, RadixNode node, Queue<String> results, StringBuilder pb) {
+    SearchResult searchResult = searchKey(prefix, node);
+    switch (searchResult.classification) {
+      case NO_MATCH:
+        return results;
+      case EXACT_MATCH_WITH_PREFIX_KEY_LARGER_THAN_PREFIX:
+        pb.append(searchResult.matchedSequence);
+        keysWithPrefix(searchResult.keySuffix, searchResult.node, results, pb);
+        break;
+      case EXACT_MATCH_WITH_PREFIX:
+      case PARTIAL_MATCH:
+        collect(searchResult.node, pb, results);
+        break;
+    }
+    return results;
+  }
+
+  private void collect(RadixNode<T> node, StringBuilder prefix, Queue<String> results) {
+    if (node == null) return;
+    prefix.append(node.prefix);
+    if (node.hasValue) results.add(prefix.toString());
+    Set<RadixNode<T>> edges = node.outGoingNodes;
+    for (RadixNode<T> edge : edges) {
+      collect(edge, prefix, results);
+      prefix.delete(prefix.lastIndexOf(((String) edge.prefix)), prefix.length());
+    }
+  }
+
+  @Override
+  public String longestPrefixOf(String query) {
+    if (query == null) throw new IllegalArgumentException("argument to longestPrefixOf() is null");
+    return longestPrefixOf(query, root, new StringBuilder(), "");
+  }
+
+  private String longestPrefixOf(
+      CharSequence query, RadixNode node, StringBuilder prefixBuilder, CharSequence result) {
+
+    SearchResult searchResult = searchKey(query, node);
+    switch (searchResult.classification) {
+      case NO_MATCH:
+      case PARTIAL_MATCH:
+        break;
+      case EXACT_MATCH_WITH_PREFIX_KEY_LARGER_THAN_PREFIX:
+        prefixBuilder.append(searchResult.matchedSequence);
+        if (searchResult.node.hasValue) result = prefixBuilder.toString();
+        result = longestPrefixOf(searchResult.keySuffix, searchResult.node, prefixBuilder, result);
+        break;
+      case EXACT_MATCH_WITH_PREFIX:
+        prefixBuilder.append(searchResult.matchedSequence);
+        if (searchResult.node.hasValue) result = prefixBuilder.toString();
+        break;
+    }
+
+    return result.toString();
+  }
+
+  private RadixNode createNode(CharSequence prefix, Object value) {
+    RadixNode n = new RadixNode();
+    n.prefix = prefix;
+    n.hasValue = true;
+    n.value = value;
+    n.outGoingNodes = new TreeSet();
+    return n;
+  }
+
+  private SearchResult searchKey(CharSequence key, RadixNode node) {
+    if (node == null) return new SearchResult(null, null, -1, key);
+    Set<RadixNode> edges = node.outGoingNodes;
+    for (RadixNode n : edges) {
+      int charsMatched = largestPrefixLength(key, n.prefix);
+      if (charsMatched > 0) return new SearchResult(node, n, charsMatched, key);
+    }
+    return new SearchResult(null, null, -1, key);
+  }
+
+  protected static class SearchResult {
+
+    RadixNode nodeParent;
+    RadixNode node;
+    Classification classification;
+    CharSequence keySuffix;
+    CharSequence prefixSuffix;
+    CharSequence matchedSequence;
+    CharSequence searchKey;
+
+    SearchResult(RadixNode nodeParent, RadixNode node, int charsMatched, CharSequence key) {
+
+      if (charsMatched > 0) {
+
+        classification = Classification.PARTIAL_MATCH; // this is default
+        this.nodeParent = nodeParent;
+        this.node = node;
+        this.searchKey = key;
+        this.keySuffix = this.searchKey.subSequence(charsMatched, this.searchKey.length());
+        this.prefixSuffix = this.node.prefix.subSequence(charsMatched, this.node.prefix.length());
+        this.matchedSequence = this.searchKey.subSequence(0, charsMatched);
+
+        if (this.searchKey.length() == this.node.prefix.length()
+            && this.searchKey.length() == charsMatched) {
+          classification = Classification.EXACT_MATCH_WITH_PREFIX;
+        }
+
+        if (this.node.prefix.length() == charsMatched
+            && this.searchKey.length() > this.node.prefix.length()) {
+          classification = Classification.EXACT_MATCH_WITH_PREFIX_KEY_LARGER_THAN_PREFIX;
+        }
+
+      } else {
+        classification = Classification.NO_MATCH;
+        this.searchKey = key;
+        this.nodeParent = this.node = null;
+        this.matchedSequence = this.keySuffix = this.prefixSuffix = null;
+      }
+    }
+
+    protected enum Classification {
+      EXACT_MATCH_WITH_PREFIX,
+      EXACT_MATCH_WITH_PREFIX_KEY_LARGER_THAN_PREFIX,
+      PARTIAL_MATCH,
+      NO_MATCH
+    }
+  }
+
+  /**
+   * Represet a Radix Node
+   *
+   * @param <T>
+   */
+  protected static final class RadixNode<T> implements Comparable<RadixNode<T>> {
+    CharSequence prefix = "";
+    T value;
+    boolean hasValue = false;
+    Set<RadixNode<T>> outGoingNodes = new TreeSet<>();
+
     @Override
-    public int compareTo(Node node) {
-      return this.prefix.compareTo(node.prefix);
+    public int compareTo(RadixNode<T> o) {
+      return this.prefix.toString().compareTo(o.prefix.toString());
     }
   }
 }
