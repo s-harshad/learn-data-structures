@@ -15,11 +15,17 @@ import java.util.TreeSet;
  * @param <T> generic value for symbol table.
  * @author Harshad Shrishrimal
  */
-public class RadixTrie<T> extends Trie<T> {
+final public class RadixTrie<T> extends Trie<T> {
 
-  RadixNode<T> root = new RadixNode<>();
+  final private RadixNode<T> root = new RadixNode<>();
 
-  public int largestPrefixLength(CharSequence a, CharSequence b) {
+  /**
+   * Compare 2 sequences {@code a} & {@code b}, and return the end index till they match.
+   * @param a sequence to compare
+   * @param b sequence to compare
+   * @return 0 if no match between the 2 sequences, index till they match.
+   */
+  private int largestPrefixLength(CharSequence a, CharSequence b) {
     int len = 0;
     int to = Math.min(a.length(), b.length());
     for (; len < to && a.charAt(len) == b.charAt(len); len++) {}
@@ -354,7 +360,7 @@ public class RadixTrie<T> extends Trie<T> {
   /**
    * Class encapsulating the node, matched sequence and any remaining strings.
    */
-  protected static class SearchResult {
+  protected final static class SearchResult {
 
     RadixNode nodeParent; // parent of node node.
     RadixNode node; // node on with comparsion is performec
