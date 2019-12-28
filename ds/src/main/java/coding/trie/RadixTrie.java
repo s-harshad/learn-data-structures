@@ -150,6 +150,17 @@ public class RadixTrie<T> extends Trie<T> {
     return node == null ? null : node.hasValue ? node.value : null;
   }
 
+  /**
+   * Check {@code prefix} against current {@code node}.
+   * 2 possibilities when this check if performed.
+   *
+   * 1. NO MATCH -- in this case return null
+   * 2. PARTIAL MATCH -- in this case recursively search for non-matched characters in prefix.
+   *
+   * @param prefix current prefix to check against
+   * @param node current node
+   * @return {@code RadixNode} if it is found; {@code null} otherwise
+   */
   private RadixNode<T> get(CharSequence prefix, RadixNode<T> node) {
     if (prefix.length() == 0) return node; // exit condition
 
@@ -170,6 +181,18 @@ public class RadixTrie<T> extends Trie<T> {
     delete(key, root);
   }
 
+  /**
+   * Recursively traverse, and find the node which needs to be removed from trie.
+   * 3 possibilities during traversal.
+   *
+   * 1. NO MATCH - node is not there, in this case return null.
+   * 2. KEY MATCH NODE COMPLETELY -
+   *      In this case check, the number of childrens this node has, and merge if applicable.
+   * 3. KEYS' PREFIX MATCHES NODE -
+   *      In this case recursively call delete with non-matched characters as the new prefix
+   * @param prefix current prefix.
+   * @param node current node to start search from
+   */
   private void delete(CharSequence prefix, RadixNode node) {
 
     SearchResult searchResult = searchKey(prefix, node);
@@ -295,6 +318,13 @@ public class RadixTrie<T> extends Trie<T> {
     return result.toString();
   }
 
+  /**
+   * Create a node.
+   *
+   * @param prefix prefix that will identify the node during comparison
+   * @param value Value that needs to be placed at this node
+   * @return RadixNode that will be inserted into trie data structure.
+   */
   private RadixNode createNode(CharSequence prefix, Object value) {
     RadixNode n = new RadixNode();
     n.prefix = prefix;
@@ -304,6 +334,13 @@ public class RadixTrie<T> extends Trie<T> {
     return n;
   }
 
+  /**
+   * Given key/prefix and a Node find if the key matches the node's prefix.
+   *
+   * @param key key to search
+   * @param node node to search
+   * @return search results
+   */
   private SearchResult searchKey(CharSequence key, RadixNode node) {
     if (node == null) return new SearchResult(null, null, -1, key);
     Set<RadixNode> edges = node.outGoingNodes;
